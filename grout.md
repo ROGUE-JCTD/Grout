@@ -31,7 +31,16 @@ The `tilesets` table contains a listing of all of the Grout tilesets stored in t
 * `bounds`: The maximum extent of the tileset.  The bounds are encoded in WGS84 using the OpenLayer Bounds format: left, bottom, right top.
 * **optional** `metadata`: XML document containing geospatial metadata in accordance with ISO 19115 or other metadata standard.
 
-	CREATE TABLE "tilesets" ("tilelevel_table" text PRIMARY KEY,"title" text NOT NULL,"description" text NOT NULL,"version" integer NOT NULL,"srid" text NOT NULL,"format" text NOT NULL,"bbox" text NOT NULL, "metadata" text)
+```sql
+CREATE TABLE "tilesets" ("tilelevel_table" text PRIMARY KEY,
+	"title" text NOT NULL,
+	"description" text NOT NULL,
+	"version" integer NOT NULL,
+	"srid" text NOT NULL,
+	"format" text NOT NULL,
+	"bbox" text NOT NULL, 
+	"metadata" text);
+```
 
 #### Tile Level Table
 
@@ -45,7 +54,13 @@ The tile level table stores the information for all zoom levels in a tileset.  T
 * `pixels_per_side`: The width/height of the tile in pixels.  Tiles must be square.
 * `tile_span`: The width/height of a tile in SRS/CRS units.  Tiles must be square.
 
-	CREATE TABLE "sample_tl" ("tile_table" TEXT PRIMARY KEY  NOT NULL , "zoom_level" INTEGER NOT NULL , "tile_container" TEXT, "pixels_per_side" INTEGER NOT NULL , "tile_span" DOUBLE NOT NULL )
+```sql
+CREATE TABLE "sample_tl" ("tile_table" TEXT PRIMARY KEY  NOT NULL , 
+	"zoom_level" INTEGER NOT NULL ,
+	"tile_container" TEXT, 
+	"pixels_per_side" INTEGER NOT NULL , 
+	"tile_span" DOUBLE NOT NULL );
+```
 
 #### Tile Table
 
@@ -58,6 +73,16 @@ The tile table stores the information used to locate the tile.  If the `tile_con
 * **optional** `tile_locator`: Information needed to access tile when stored in an external tile container.  If omitted table use contain `tile_data`.
 * **optional** `tile_data`: Raw tile image data.  If omitted table use contain `tile_locator`.
 
-	CREATE TABLE "sample_lvl0" ("tile_column" INTEGER NOT NULL , "tile_row" INTEGER NOT NULL , "tile_locator" TEXT NOT NULL , PRIMARY KEY ("tile_column", "tile_row"))
+```sql
+CREATE TABLE "sample_lvl0" ("tile_column" INTEGER NOT NULL , 
+	"tile_row" INTEGER NOT NULL , 
+	"tile_locator" TEXT NOT NULL , 
+	PRIMARY KEY ("tile_column", "tile_row"));
+```
 **or**
-	CREATE TABLE "sample_lvl1" ("tile_column" INTEGER NOT NULL , "tile_row" INTEGER NOT NULL , "tile_data" BLOB NOT NULL , PRIMARY KEY ("tile_column", "tile_row"))
+```sql
+CREATE TABLE "sample_lvl1" ("tile_column" INTEGER NOT NULL , 
+	"tile_row" INTEGER NOT NULL , 
+	"tile_data" BLOB NOT NULL , 
+	PRIMARY KEY ("tile_column", "tile_row"));
+```
