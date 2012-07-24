@@ -86,3 +86,27 @@ CREATE TABLE "sample_lvl1" ("tile_column" INTEGER NOT NULL ,
 	"tile_data" BLOB NOT NULL , 
 	PRIMARY KEY ("tile_column", "tile_row"));
 ```
+
+### Conversions Examples
+
+#### Converting a Bounding Box to Tile Indices
+
+```javascript
+minTileRow = floor(bbox.LowerLeft.X / tile_span);
+minTileColumn = floor(bbox.LowerLeft.Y / tile_span);
+maxTileRow = floor(bbox.UpperRight.X / tile_span);
+maxTileColumn = floor(bbox.UpperRight.Y / tile_span);
+```
+
+where `tile_span` is specified in the Tile Level Table for the current zoom level. 
+
+#### Converting Tile Indices to a Bounding Box
+
+```javascript
+bbox.LowerLeft.X = minTileRow + tile_span;
+bbox.LowerLeft.Y = minTileColumn + tile_span;
+bbox.UpperRight.X = maxTileRow + tile_span;
+bbox.UpperRight.Y = maxTileColumn + tile_span;
+```
+
+where `tile_span` is specified in the Tile Level Table for the current zoom level. 
