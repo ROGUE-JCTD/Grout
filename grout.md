@@ -1,9 +1,5 @@
 # Grout
 
-## Abstract
-
-Grout is a scheme for storing tiled map data targeted mobile devices (Android and iOS) and desktops.  It is intended for direct usage and file transfer.  
-
 ## Database Specifications
 
 Grout assumes SQLite version 3.0.0 and higher.
@@ -12,7 +8,9 @@ Grout assumes SQLite version 3.0.0 and higher.
 
 ### Overview
 
-The database may contain multiple tilesets.  Each tileset is identified by a row in the `tilesets` table.  A tileset is comprised of multiple tile levels which are identified by rows in the tileset's `tilelevel_table`.  A seperate table is used to store the tile information for each tile level.  The tiles themselves can either be stored directly in the database as blobs or stored in a file container external to the database.  The advantage of storing the tiles in an external file container is it allows large tilesets to be stored on devices with relatively small file size limitations, i.e. 4GB on FAT32 media.
+Grout is a scheme for storing tiled map data targeted for mobile devices (Android and iOS) and desktops. It is intended for direct usage and file transfer.  The tiled map data is stored as a tileset in a database. The database may contain multiple tilesets.  Each tileset is identified by a row in the `tilesets` table. A tileset is comprised of multiple tile levels, which are identified by rows in the tileset's `tilelevel_table`. A separate table is used to store the tile information for each tile level. The tiles themselves can be stored directly in the database as blobs or stored in a file container external to the database. One advantage of storing the tiles in an external file container is that it allows large tilesets to be stored on devices with relatively small file size limitations, i.e. 4GB on FAT32 media. An explanation of how to identify a blob or external tileset is described in the **Table Structure** section under **Tile Level Table**.
+
+Grout does not define a method for interacting with the data rendered in the tiles.  If functionality is needed, 
 
 ### Schema
 
@@ -23,7 +21,7 @@ The `tilesets` table contains a listing of all of the Grout tilesets stored in t
 ##### Table Structure
 
 * `tilelevel_table`: (Primary Key) The name of the table in the database that describes all of the level information for the tiles in this tileset.
-* `title`: A short english name for the tileset that might be displayed in a table of contents.
+* `title`: A short informative name for the tileset that might be displayed in a table of contents.
 * `description`: A description of the data represented in the tileset.
 * `version`: The integer version of the tileset.
 * `srid`: The spatial reference (SRS/CRS) of the tileset.
@@ -50,12 +48,12 @@ The tile level table stores the information for all zoom levels in a tileset.  T
 
 * `tile_table`: (Primary Key) The name of the table in the database that stores the values used to locate the tiles.
 * `zoom_level`: The zoom level of this tile level entry.
-* `tile_container`: The path to the container used to store the tiles for this tile level.  If the tiles are stored in the tile table this is NULL.
+* `tile_container`: The path to the container used to store the tiles for this tile level.  If the tiles are stored in the tile table as a blob then this value is NULL.
 * `pixels_per_side`: The width/height of the tile in pixels.  Tiles must be square.
 * `tile_span`: The width/height of a tile in SRS/CRS units.  Tiles must be square.
 
 ```sql
-CREATE TABLE "sample_tl" ("tile_table" TEXT PRIMARY KEY  NOT NULL , 
+CREATE TABLE "sample_tl" ("tile_table" TEXT PRIMARY KEY NOT NULL , 
 	"zoom_level" INTEGER NOT NULL ,
 	"tile_container" TEXT, 
 	"pixels_per_side" INTEGER NOT NULL , 
@@ -70,8 +68,8 @@ The tile table stores the information used to locate the tile.  If the `tile_con
 
 * `tile_column`: Column index of the tile.
 * `tile_row`: Row index of the tile
-* **optional** `tile_locator`: Information needed to access tile when stored in an external tile container.  If omitted table use contain `tile_data`.
-* **optional** `tile_data`: Raw tile image data.  If omitted table use contain `tile_locator`.
+* **optional** `tile_locator`: Information needed to access tile when stored in an external tile container.  If omitted table must contain `tile_data` field.
+* **optional** `tile_data`: Raw tile image data.  If omitted table must contain `tile_locator` field.
 
 ```sql
 CREATE TABLE "sample_lvl0" ("tile_column" INTEGER NOT NULL , 
