@@ -3,6 +3,9 @@ Grout
 
 A raster map tile project with a focus on simplicity and mobile uses.
 
+## The Details
+The full description of Grout is in `grout.md`.
+
 ## References
 * [MBTile](https://github.com/mapbox/mbtiles-spec)
 * [Tile Map Service](http://wiki.osgeo.org/wiki/Tile_Map_Service_Specification)
